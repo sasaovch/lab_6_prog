@@ -1,0 +1,34 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Launch Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "Launch Client",
+            "request": "launch",
+            "mainClass": "lab_6.client.Client",
+            "projectName": "lab-client"
+        },
+        {
+            "type": "java",
+            "name": "Launch Server",
+            "request": "launch",
+            "mainClass": "lab_6.server.Server",
+            "projectName": "lab-server"
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Compound",
+            "configurations": ["Launch Server", "Launch Client"]
+        }
+    ]
+}
