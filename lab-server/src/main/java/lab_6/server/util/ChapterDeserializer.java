@@ -12,10 +12,6 @@ import com.google.gson.JsonParseException;
 import lab_6.common.data.Chapter;
 import lab_6.common.exception.IncorrectData;
 
-
-/**
- * Type adapter of Chapter for json deserialization.
- */
 public class ChapterDeserializer implements JsonDeserializer<Chapter> {
 
     @Override

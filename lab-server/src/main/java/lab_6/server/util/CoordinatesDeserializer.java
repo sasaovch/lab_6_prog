@@ -11,9 +11,6 @@ import com.google.gson.JsonParseException;
 import lab_6.common.data.Coordinates;
 import lab_6.common.exception.IncorrectData;
 
-/**
- * Type adapter of Coordinates for json deserialization.
- */
 public class CoordinatesDeserializer implements JsonDeserializer<Coordinates> {
 
     @Override

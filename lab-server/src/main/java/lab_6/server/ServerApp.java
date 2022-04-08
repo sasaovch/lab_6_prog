@@ -42,8 +42,7 @@ public class ServerApp {
     private File file;
     private boolean isWorkState;
 
-    public ServerApp (SpaceMarineCollection collection, CommandManager commands, InetAddress addr, int port) {
-        this.collection = collection;
+    public ServerApp (CommandManager commands, InetAddress addr, int port) {
         this.commands = commands;
         address = new InetSocketAddress(addr, port);
     }
@@ -173,18 +172,21 @@ public class ServerApp {
             String fileline = readfile(file);
             collection = pars.deSerialize(fileline);
         } catch (JsonSyntaxException | FileNotFoundException e) {
-            logger.info("Something with parsing went wrong. Check data in file and rights of file");
+            logger.info("Something with parsing went wrong. Check data in file and rights of file.");
+            result = new CommandResult("Something with parsing went wrong. Check data in file and rights of file.", false);
+            sendCommResult(result);
             isWorkState = false;
+            logger.info("Finish work.");
+            return;
         }
         if (Objects.equals(collection, null)) {
             result = new CommandResult("Incorrect data in file for parsing.", false);
             sendCommResult(result);
-            logger.info("Send message to client that the collection hasn't been created");
             isWorkState = false;
+            logger.info("Finish work.");
         } else {
             result = new CommandResult("Everything is ready to work.", true);
             sendCommResult(result);
-            logger.info("Send message to client that the collection has been created");
         }
     }
 }

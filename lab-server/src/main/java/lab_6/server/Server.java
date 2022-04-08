@@ -2,9 +2,10 @@ package lab_6.server;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.Objects;
 
 import lab_6.common.commands.*;
-import lab_6.common.data.SpaceMarineCollection;
 
 public final class Server {
 
@@ -13,7 +14,28 @@ public final class Server {
     }
 
     public static void main(String[] args) throws IOException, ClassNotFoundException {
-        SpaceMarineCollection collection = new SpaceMarineCollection();
+        InetAddress addrr;
+        Integer port;
+        String address = System.getenv("address");
+        String portString = System.getenv("port");
+        if (Objects.equals(address, null)){
+            addrr = InetAddress.getLocalHost();
+        } else {
+            try {
+                addrr = InetAddress.getByName(address);
+            } catch (UnknownHostException e) {
+                addrr = InetAddress.getLocalHost();
+            }
+        }
+        if (Objects.equals(portString, null)){
+            port = 8713;
+        } else {
+            try {
+                port = Integer.parseInt(portString);
+            } catch (NumberFormatException e) {
+                port = 8713;
+            }
+        }
         CommandManager commands = new CommandManager();
         commands.addCommand("help", new HelpCommand());
         commands.addCommand("info", new InfoCommand());
@@ -28,7 +50,7 @@ public final class Server {
         commands.addCommand("group_counting_by_name", new GroupCountingByNameCommand());
         commands.addCommand("count_by_loyal", new CountByLoyalCommand());
         commands.addCommand("print_descending", new PrintDescendingCommand());
-        ServerApp app = new ServerApp(collection, commands, InetAddress.getLocalHost(), 7000);
+        ServerApp app = new ServerApp(commands, addrr, port);
         app.start();
     }
 }

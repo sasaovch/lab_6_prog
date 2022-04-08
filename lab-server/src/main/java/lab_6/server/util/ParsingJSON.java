@@ -36,12 +36,10 @@ public class ParsingJSON {
             .registerTypeAdapter(Coordinates.class, new CoordinatesDeserializer())
             .registerTypeAdapter(Chapter.class, new ChapterDeserializer())
             .create();;
-        //Type type = new TypeToken<SpaceMarineCollection>() {}.getType();
         if ("".equals(strData)) {
             return new SpaceMarineCollection();
         }
         SpaceMarineCollection deserCollection = g.fromJson(strData, SpaceMarineCollection.class);
-        deserCollection.getCollection().stream().forEach(s -> System.out.println(s));
         if (Objects.equals(deserCollection, null)) {
             return null;
         }

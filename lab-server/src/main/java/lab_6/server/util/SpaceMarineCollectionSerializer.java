@@ -11,9 +11,6 @@ import lab_6.common.data.SpaceMarineCollection;
 
 
 
-/**
- * Type adapter of SpaceMarineCollection for json serialization.
- */
 public class SpaceMarineCollectionSerializer implements JsonSerializer<SpaceMarineCollection> {
 
 	@Override

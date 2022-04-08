@@ -30,7 +30,6 @@ public class Console {
             ioManager.printerr("There is no such variable \"filePath\"");
             return;
         }
-        Thread.sleep(1000);
         server.sendMessage(new Message(filePath, null, null));
         CommandResult res = server.reciveMessage();
         if (Objects.isNull(res)) {
@@ -42,7 +41,7 @@ public class Console {
         String name, line, value;
         line = "";
         Message mess;
-        while (!"exit".equals(line)) {
+        while (true) {
             if (!ioManager.getFileMode()) ioManager.prompt();
             line = ioManager.readLine();
             if (Objects.equals(line, null) && !ioManager.getFileMode()) {
@@ -50,6 +49,8 @@ public class Console {
             } else if (Objects.equals(line, null)) {
                 ioManager.turnOffFileMode();
                 continue;
+            } else if ("exit".equals(line)) {
+                break;
             }
             command = (line.trim() + " " + " ").split(" ", 3);
             name = command[0];
@@ -70,16 +71,10 @@ public class Console {
                     continue;
                 }
             }
-                //continue;
             if (!command[2].trim().equals("")) {
-                // if (!statusFile) {
                     ioManager.printerr("Incorrect input.");
                     continue;
-                // } else {
-                    // ioManager.printerr("Incorrect data in file.");
-                    // break;
-                }
-                //continue;
+            }
             try {
                 switch (name) {
                     case "add" : 
@@ -154,12 +149,14 @@ public class Console {
                     }
                     res = server.reciveMessage();
                     if (Objects.isNull(res)) {
-                        return;
+                        ioManager.println("Server disconnected.");
+                        break;
                     }
                     ioManager.println(res.getMessage());
             } catch (IncorrectDataOfFileException e) {
+                ioManager.printerr("Incorrect data in file.");
             }
         }
-        ioManager.println("Good buy");
+        ioManager.println("Good Buy!\n\\(?_?)/");
     }
 }

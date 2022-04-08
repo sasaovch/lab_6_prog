@@ -13,9 +13,6 @@ import lab_6.common.data.SpaceMarine;
 import lab_6.common.exception.IncorrectData;
 import lab_6.common.exception.IncorrectDataOfFileException;
 
-/**
- * Asks a user a Marine's value.
- */
 public class AskMarine {
     private final IOManager ioManager;
 
@@ -23,12 +20,6 @@ public class AskMarine {
         this.ioManager = ioManager;
     }
 
-    /**
-     * Asks a user the Marine's name.
-     * @return Marine's name.
-     * @throws IOException If something goes wrong with reading file.
-     * @throws IncorrectDataOfFileException When data in file isn't correct.
-     */
     public String askName() throws IOException, IncorrectDataOfFileException {
         String name = asker(arg -> arg, 
                          arg -> ((String) arg).length() > 0,  
@@ -38,14 +29,6 @@ public class AskMarine {
         return name;
     }
 
-    /**
-     * Asks a user the Marine's coordinates.
-     * @return Marine's coordinates.
-     * @throws Incorrectlab5.client.dataOfFileException If script is running and something goes wrong.
-     * @throws IOException If something goes wrong with reading file.
-     * @throws IncorrectDataOfFileException When data in file isn't correct.
-     * @throws IncorrectData When data for element is incorrect.
-     */
     public Coordinates askCoordinates() throws IOException, IncorrectDataOfFileException, IncorrectData {
         double coordinateX = asker(Double::parseDouble, 
                                 arg -> true, 
@@ -63,12 +46,6 @@ public class AskMarine {
         return cor;
     }
 
-    /**
-     * Asks a user the Marine's health.
-     * @return Marine's health.
-     * @throws IOException If something goes wrong with reading file.
-     * @throws IncorrectDataOfFileException When data in file isn't correct.
-     */
     public Integer askHealth() throws IOException, IncorrectDataOfFileException{
         Integer health = asker(Integer::parseInt, 
                            arg -> ((Integer) arg) > 0, 
@@ -79,12 +56,6 @@ public class AskMarine {
         return health;
     }
 
-    /**
-     * Asks a user the Marine's heart count.
-     * @return Marine's heart count.
-     * @throws IOException If something goes wrong with reading file.
-     * @throws IncorrectDataOfFileException When data in file isn't correct.
-     */
     public Integer askHeartCount() throws IOException, IncorrectDataOfFileException{
         Integer heartCount = asker(Integer::parseInt, 
                                arg -> 1 <= ((Integer) arg) && arg <= 3, 
@@ -95,12 +66,6 @@ public class AskMarine {
         return heartCount;
     }
 
-    /**
-     * Asks a user the Marine's loyal.
-     * @return Marine's loyal.
-     * @throws IOException If something goes wrong with reading file.
-     * @throws IncorrectDataOfFileException When data in file isn't correct.
-     */
     public Boolean askLoyal() throws IOException, IncorrectDataOfFileException {
         Boolean loyal = asker(arg -> {
                     if (!(arg.equals("false") || arg.equals("true") || arg.equals(""))) {
@@ -116,12 +81,6 @@ public class AskMarine {
         return loyal;
     }
 
-    /**
-     * Asks a user the Marine's category.
-     * @return Marine's category.
-     * @throws IOException If something goes wrong with reading file.
-     * @throws IncorrectDataOfFileException When data in file isn't correct.
-     */
     public AstartesCategory askCategory() throws IOException, IncorrectDataOfFileException {
         AstartesCategory category = asker(arg -> AstartesCategory.valueOf(arg.toUpperCase()), 
                                  arg -> true, 
@@ -132,13 +91,6 @@ public class AskMarine {
         return category;
     }
 
-    /**
-     * Asks a user the Marine's Chapter.
-     * @return Marine's Chapter.
-     * @throws IOException If something goes wrong with reading file.
-     * @throws IncorrectDataOfFileException When data in file isn't correct.
-     * @throws IncorrectData When data for element is incorrect.
-     */
     public Chapter askChapter() throws IOException, IncorrectDataOfFileException, IncorrectData {
         String name = asker(arg -> arg, arg -> true, "Enter name of chapter, empty line if chapter is null", 
                          "", true, ioManager.getFileMode());
@@ -159,13 +111,6 @@ public class AskMarine {
             }
     }
 
-    /**
-     * Asks a user the Marine.
-     * @return Marine.
-     * @throws IOException If something goes wrong with reading file.
-     * @throws IncorrectDataOfFileException When data in file isn't correct.
-     * @throws IncorrectData When data for element is incorrect.
-     */
     public  SpaceMarine askMarine() throws IOException, IncorrectDataOfFileException, IncorrectData {
         String name = askName();
         Coordinates coordinates = askCoordinates();
@@ -177,18 +122,6 @@ public class AskMarine {
         return new SpaceMarine(name, coordinates, LocalDateTime.now(), health, heartCount, loyal, category, chapter);
     }
 
-    /**
-     * Parsing for input.
-     * @param <T> Type for retrurn element.
-     * @param function Function for parsing.
-     * @param predicate Condition for element.
-     * @param askField Message for input.
-     * @param wrongValue Message if value isn't correct.
-     * @param nullable True if element can be null.
-     * @return Element.
-     * @throws IOException When something with file went wrong.
-     * @throws IncorrectDataOfFileException
-     */
     public <T> T asker(Function<String, T> function,
                        Predicate<T> predicate,  
                        String askField, 

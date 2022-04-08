@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.util.HashSet;
+import java.util.Objects;
 
 import lab_6.common.exception.IncorrectData;
 import lab_6.common.exception.IncorrectDataOfFileException;
@@ -17,6 +18,17 @@ public final class Client {
     }
 
     public static void main(String[] args) throws IOException, IncorrectDataOfFileException, IncorrectData, ClassNotFoundException, InterruptedException {
+        Integer port;
+        String portString = System.getenv("port");
+        if (Objects.equals(portString, null)){
+            port = 8713;
+        } else {
+            try {
+                port = Integer.parseInt(portString);
+            } catch (NumberFormatException e) {
+                port = 8713;
+            }
+        }
         HashSet<String> commands = new HashSet<>();
         commands.add("help");
         commands.add("info");
@@ -37,7 +49,7 @@ public final class Client {
         PrintWriter writer = new PrintWriter(System.out, true);
         IOManager ioManager = new IOManager(reader, writer, "$");
         AskMarine asker = new AskMarine(ioManager);
-        ServerWork server = new ServerWork(InetAddress.getLocalHost(), new DatagramSocket(), 7000);
+        ServerWork server = new ServerWork(InetAddress.getLocalHost(), new DatagramSocket(), port);
         server.setTimeout(1000);
         Console console = new Console(commands, ioManager, asker, server);
         console.run();
