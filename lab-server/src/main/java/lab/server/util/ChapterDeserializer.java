@@ -1,4 +1,4 @@
-package lab_6.server.util;
+package lab.server.util;
 
 import java.lang.reflect.Type;
 
@@ -9,8 +9,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
-import lab_6.common.data.Chapter;
-import lab_6.common.exception.IncorrectData;
+import lab.common.data.Chapter;
+import lab.common.exception.IncorrectData;
 
 public class ChapterDeserializer implements JsonDeserializer<Chapter> {
 

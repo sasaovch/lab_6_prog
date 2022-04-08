@@ -1,4 +1,4 @@
-package lab_6.client;
+package lab.client;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -11,8 +11,8 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 
-import lab_6.common.commands.CommandResult;
-import lab_6.common.util.Message;
+import lab.common.commands.CommandResult;
+import lab.common.util.Message;
 
 public class ServerWork {
     private final InetAddress address;

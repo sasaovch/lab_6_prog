@@ -1,14 +1,14 @@
-package lab_6.client;
+package lab.client;
 
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Objects;
 
-import lab_6.common.commands.CommandResult;
-import lab_6.common.data.SpaceMarine;
-import lab_6.common.exception.IncorrectData;
-import lab_6.common.exception.IncorrectDataOfFileException;
-import lab_6.common.util.Message;
+import lab.common.commands.CommandResult;
+import lab.common.data.SpaceMarine;
+import lab.common.exception.IncorrectData;
+import lab.common.exception.IncorrectDataOfFileException;
+import lab.common.util.Message;
 
 
 public class Console {

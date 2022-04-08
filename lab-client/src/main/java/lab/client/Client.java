@@ -1,4 +1,4 @@
-package lab_6.client;
+package lab.client;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,8 +9,8 @@ import java.net.InetAddress;
 import java.util.HashSet;
 import java.util.Objects;
 
-import lab_6.common.exception.IncorrectData;
-import lab_6.common.exception.IncorrectDataOfFileException;
+import lab.common.exception.IncorrectData;
+import lab.common.exception.IncorrectDataOfFileException;
 
 public final class Client {
     private Client() {

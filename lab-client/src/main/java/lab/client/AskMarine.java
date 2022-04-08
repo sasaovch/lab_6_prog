@@ -1,4 +1,4 @@
-package lab_6.client;
+package lab.client;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -6,12 +6,12 @@ import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import lab_6.common.data.AstartesCategory;
-import lab_6.common.data.Chapter;
-import lab_6.common.data.Coordinates;
-import lab_6.common.data.SpaceMarine;
-import lab_6.common.exception.IncorrectData;
-import lab_6.common.exception.IncorrectDataOfFileException;
+import lab.common.data.AstartesCategory;
+import lab.common.data.Chapter;
+import lab.common.data.Coordinates;
+import lab.common.data.SpaceMarine;
+import lab.common.exception.IncorrectData;
+import lab.common.exception.IncorrectDataOfFileException;
 
 public class AskMarine {
     private final IOManager ioManager;

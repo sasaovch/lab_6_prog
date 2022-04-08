@@ -1,4 +1,4 @@
-package lab_6.common.data;
+package lab.common.data;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import lab_6.common.exception.IncorrectData;
+import lab.common.exception.IncorrectData;
 
 
 public class SpaceMarineCollection {
@@ -21,13 +21,13 @@ public class SpaceMarineCollection {
     private final LocalDateTime initializationTime;
     private final TreeSet<Long> usedID;
 
-    public SpaceMarineCollection(){
+    public SpaceMarineCollection() {
         spaceMarineSet = new HashSet<>();
         initializationTime = LocalDateTime.now();
         usedID = new TreeSet<>();
     }
 
-    public SpaceMarineCollection(HashSet<SpaceMarine> spaceMarineSet){
+    public SpaceMarineCollection(HashSet<SpaceMarine> spaceMarineSet) {
         this.spaceMarineSet = spaceMarineSet;
         initializationTime = LocalDateTime.now();
         usedID = new TreeSet<>();
@@ -70,7 +70,7 @@ public class SpaceMarineCollection {
         }
     }
 
-    public boolean removeElement(SpaceMarine element){
+    public boolean removeElement(SpaceMarine element) {
         usedID.remove(element.getID());
         return spaceMarineSet.remove(element);
     }
@@ -86,28 +86,28 @@ public class SpaceMarineCollection {
         return true;
     }
 
-    public LocalDateTime getTime(){
+    public LocalDateTime getTime() {
         return initializationTime;
     }
 
-    public int getSize(){
+    public int getSize() {
         return spaceMarineSet.size();
     }
 
-    public HashSet<SpaceMarine> getCollection(){
+    public HashSet<SpaceMarine> getCollection() {
         return spaceMarineSet;
     }
 
-    public Long getLastId(){
+    public Long getLastId() {
         return usedID.last();
     }
 
-    public void clearCollection(){
+    public void clearCollection() {
         usedID.clear();
         spaceMarineSet.clear();
     }
 
-    public List<SpaceMarine> sortCollection(){
+    public List<SpaceMarine> sortCollection() {
         List<SpaceMarine> list = new ArrayList<SpaceMarine>(getCollection());
         Collections.sort(list);
         return list;
@@ -120,7 +120,7 @@ public class SpaceMarineCollection {
     public <R> HashMap<String, Integer> groupCountingByField(Function<SpaceMarine, R> getter) {
         HashMap<String, Integer> outputMap = new HashMap<>();
         for (SpaceMarine spaceMarine : spaceMarineSet) {
-            outputMap.compute(getter.apply(spaceMarine).toString(), (key, val) -> (Objects.equals(val, null) ? 1: val + 1));
+            outputMap.compute(getter.apply(spaceMarine).toString(), (key, val) -> (Objects.equals(val, null) ? 1 : val + 1));
         }
         return outputMap;
     }
@@ -136,6 +136,6 @@ public class SpaceMarineCollection {
         } catch (IncorrectData e) {
             e.printStackTrace();
         }
-        return removeElement(changeMarine) && addElement(newMarine); 
+        return removeElement(changeMarine) && addElement(newMarine);
     }
 }

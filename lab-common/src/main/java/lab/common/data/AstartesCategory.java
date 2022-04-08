@@ -1,4 +1,4 @@
-package lab_6.common.data;
+package lab.common.data;
 
 
 /**
@@ -20,6 +20,6 @@ public enum AstartesCategory {
         for (AstartesCategory category : values()) {
             listofCategory += category.name() + ", ";
         }
-        return listofCategory.substring(0, listofCategory.length()-2);
+        return listofCategory.substring(0, listofCategory.length() - 2);
     }
 }

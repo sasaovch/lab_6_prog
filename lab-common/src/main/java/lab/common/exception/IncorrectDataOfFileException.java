@@ -1,5 +1,4 @@
-package lab_6.common.exception;
+package lab.common.exception;
 
 public class IncorrectDataOfFileException extends Exception {
-    
 }

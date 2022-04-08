@@ -1,4 +1,4 @@
-package lab_6.server;
+package lab.server;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -20,13 +20,13 @@ import java.util.logging.Logger;
 
 import com.google.gson.JsonSyntaxException;
 
-import lab_6.common.commands.Command;
-import lab_6.common.commands.CommandManager;
-import lab_6.common.commands.CommandResult;
-import lab_6.common.data.SpaceMarine;
-import lab_6.common.data.SpaceMarineCollection;
-import lab_6.common.util.Message;
-import lab_6.server.util.ParsingJSON;
+import lab.common.commands.Command;
+import lab.common.commands.CommandManager;
+import lab.common.commands.CommandResult;
+import lab.common.data.SpaceMarine;
+import lab.common.data.SpaceMarineCollection;
+import lab.common.util.Message;
+import lab.server.util.ParsingJSON;
 
 
 public class ServerApp {

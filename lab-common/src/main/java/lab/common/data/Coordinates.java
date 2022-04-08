@@ -1,15 +1,15 @@
-package lab_6.common.data;
+package lab.common.data;
 
 import java.io.Serializable;
 import java.util.Objects;
 
-import lab_6.common.exception.IncorrectData;
+import lab.common.exception.IncorrectData;
 
 
 /**
  * X-Y coordinates of Space Marine.
  */
-public class Coordinates implements Serializable{
+public class Coordinates implements Serializable {
     private double x;
     private Long y; //Поле не может быть null
 
@@ -18,7 +18,8 @@ public class Coordinates implements Serializable{
         setY(y);
     }
 
-    public Coordinates() {};
+    public Coordinates() {
+    }
 
     /**
      * @return Y-coordinate.

@@ -1,9 +1,9 @@
-package lab_6.common.data;
+package lab.common.data;
 
 import java.io.Serializable;
 import java.util.Objects;
 
-import lab_6.common.exception.IncorrectData;
+import lab.common.exception.IncorrectData;
 
 
 /**
@@ -22,7 +22,8 @@ public class Chapter implements Serializable {
         this.setWorld(world);
     }
 
-    public Chapter() {}
+    public Chapter() {
+    }
 
     /**
      * Set name of Chapter.
@@ -103,7 +104,7 @@ public class Chapter implements Serializable {
     }
 
     @Override
-    public int hashCode(){
+    public int hashCode() {
         return Objects.hash(name, parentLegion, marinesCount, world);
     }
 
@@ -116,7 +117,7 @@ public class Chapter implements Serializable {
             return false;
         }
         Chapter compChap = (Chapter) object;
-        return (Objects.equals(name, compChap.getName())) && (Objects.equals(parentLegion, compChap.getParentLegion())) &&
-                (Objects.equals(marinesCount, compChap.getMarinesCount())) && (Objects.equals(world, compChap.getWorld()));
+        return (Objects.equals(name, compChap.getName())) && (Objects.equals(parentLegion, compChap.getParentLegion()))
+            && (Objects.equals(marinesCount, compChap.getMarinesCount())) && (Objects.equals(world, compChap.getWorld()));
     }
 }

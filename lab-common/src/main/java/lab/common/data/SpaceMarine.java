@@ -1,17 +1,17 @@
-package lab_6.common.data;
+package lab.common.data;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
-import lab_6.common.exception.IncorrectData;
+import lab.common.exception.IncorrectData;
 
 
 /**
  * Main character. Is stored in the collection by health.
  */
-public class SpaceMarine implements Comparable<SpaceMarine>, Serializable{
+public class SpaceMarine implements Comparable<SpaceMarine>, Serializable {
     private String name; //Поле не может быть null, Строка не может быть пустой
     private Long id; //Поле не может быть null, Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
     private Coordinates coordinates; //Поле не может быть null
@@ -43,7 +43,6 @@ public class SpaceMarine implements Comparable<SpaceMarine>, Serializable{
         setLoyal(loyal);
         setCategory(category);
         setChapter(chapter);
-        
     }
 
     public SpaceMarine() {
@@ -166,7 +165,7 @@ public class SpaceMarine implements Comparable<SpaceMarine>, Serializable{
      * @param health Health of Marine.
      * @throws IncorrectData
      */
-    public void setHealth(Integer health) throws IncorrectData{
+    public void setHealth(Integer health) throws IncorrectData {
         if ((health == null) || (health <= 0)) {
             throw new IncorrectData();
         }
@@ -229,9 +228,9 @@ public class SpaceMarine implements Comparable<SpaceMarine>, Serializable{
 
     @Override
     public String toString() {
-        return "------------" + "\nName: " + name + "\nId: " + id + "\nHealth: " + health + "\nHeartCount: " +
-                heartCount + "\nLoyal: "
-    + loyal + "\nInitialization time: " + creationDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+        return "------------" + "\nName: " + name + "\nId: " + id + "\nHealth: " + health + "\nHeartCount: "
+                + heartCount + "\nLoyal: " + loyal + "\nInitialization time: "
+                + creationDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
                 + "\n" + "Chapter:\n" + chapter + "\n" + coordinates + "\nCategory: " + category + "\n";
     }
 
@@ -257,9 +256,9 @@ public class SpaceMarine implements Comparable<SpaceMarine>, Serializable{
             return false;
         }
         SpaceMarine compSpMar = (SpaceMarine) object;
-        return (name.equals(compSpMar.getName())) && (coordinates.equals(compSpMar.getCoordinates())) && 
-                (health.equals(compSpMar.getHealth())) && (heartCount.equals(compSpMar.getHeartCount())) &&
-                (Objects.equals(loyal, compSpMar.getLoyal())) && (category.equals(compSpMar.getCategory())) &&
-                (Objects.equals(chapter, compSpMar.getChapter()));
+        return (name.equals(compSpMar.getName())) && (coordinates.equals(compSpMar.getCoordinates()))
+                && (health.equals(compSpMar.getHealth())) && (heartCount.equals(compSpMar.getHeartCount()))
+                && (Objects.equals(loyal, compSpMar.getLoyal())) && (category.equals(compSpMar.getCategory()))
+                && (Objects.equals(chapter, compSpMar.getChapter()));
     }
 }
