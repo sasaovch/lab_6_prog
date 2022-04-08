@@ -14,14 +14,14 @@
             "type": "java",
             "name": "Launch Client",
             "request": "launch",
-            "mainClass": "lab_6.client.Client",
+            "mainClass": "lab.client.Client",
             "projectName": "lab-client"
         },
         {
             "type": "java",
             "name": "Launch Server",
             "request": "launch",
-            "mainClass": "lab_6.server.Server",
+            "mainClass": "lab.server.Server",
             "projectName": "lab-server"
         }
     ],
