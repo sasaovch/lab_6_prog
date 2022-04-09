@@ -35,7 +35,6 @@ public final class Client {
                 port = DEFAULT_PORT;
             }
         }
-        Thread.sleep(2000);
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         PrintWriter writer = new PrintWriter(System.out, true);
         IOManager ioManager = new IOManager(reader, writer, "$");

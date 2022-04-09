@@ -103,11 +103,11 @@ public class ParsCommand {
     public Message helpComm(String value) {
         return new Message("help", null, null);
     }
-    
+
     public Message infoComm(String value) {
         return new Message("info", null, null);
     }
-    
+
     public Message showComm(String value) {
         return new Message("show", null, null);
     }

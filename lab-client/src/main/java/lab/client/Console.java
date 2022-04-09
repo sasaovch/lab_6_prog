@@ -26,12 +26,12 @@ public class Console {
     }
 
     public void run() throws IOException, IncorrectData, ClassNotFoundException, IncorrectDataOfFileException {
-        // String filePath = System.getenv("filePath");
-        // if (Objects.equals(filePath, null)) {
-        //     ioManager.printerr("There is no such variable \"filePath\"");
-        //     return;
-        // }
-        server.sendMessage(new Message("pars.json", null, null));
+        String filePath = System.getenv("filePath");
+        if (Objects.equals(filePath, null)) {
+            ioManager.printerr("There is no such variable \"filePath\"");
+            return;
+        }
+        server.sendMessage(new Message(filePath, null, null));
         checkPrintResult(server.reciveMessage());
         String[] command = new String[lengthOfCommand];
         String line = "";
