@@ -21,23 +21,12 @@ public class SpaceMarine implements Comparable<SpaceMarine>, Serializable {
     private Boolean loyal; //Поле может быть null
     private AstartesCategory category; //Поле не может быть null
     private Chapter chapter; //Поле может быть null
+    private final Integer maxHeart = 3;
+    private final Integer minHeart = 1;
 
-    public SpaceMarine(String name, Long id, Coordinates coordinates, LocalDateTime time, Integer health, Integer heartCount, Boolean loyal, AstartesCategory category, Chapter chapter) throws IncorrectData {
-        setID(id);
+    public SpaceMarine(String name, Coordinates coordinates, Integer health, Integer heartCount, Boolean loyal, AstartesCategory category, Chapter chapter) throws IncorrectData {
         setName(name);
         setCoordinates(coordinates);
-        setTime(time);
-        setHealth(health);
-        setHeartCount(heartCount);
-        setLoyal(loyal);
-        setCategory(category);
-        setChapter(chapter);
-    }
-
-    public SpaceMarine(String name, Coordinates coordinates, LocalDateTime time, Integer health, Integer heartCount, Boolean loyal, AstartesCategory category, Chapter chapter) throws IncorrectData {
-        setName(name);
-        setCoordinates(coordinates);
-        setTime(time);
         setHealth(health);
         setHeartCount(heartCount);
         setLoyal(loyal);
@@ -129,11 +118,11 @@ public class SpaceMarine implements Comparable<SpaceMarine>, Serializable {
      * @param id ID of Marine.
      * @throws IncorrectData
      */
-    public void setID(Long id) throws IncorrectData {
-        if ((id == null) || (id <= 0)) {
+    public void setID(Long setId) throws IncorrectData {
+        if ((setId == null) || (setId <= 0)) {
             throw new IncorrectData();
         }
-        this.id = id;
+        this.id = setId;
     }
 
     /**
@@ -178,7 +167,7 @@ public class SpaceMarine implements Comparable<SpaceMarine>, Serializable {
      * @throws IncorrectData
      */
     public void setHeartCount(Integer heartCount) throws IncorrectData {
-        if (!((heartCount <= 3) && (1 <= heartCount))) {
+        if (!((heartCount <= maxHeart) && (minHeart <= heartCount))) {
             throw new IncorrectData();
         }
         this.heartCount = heartCount;

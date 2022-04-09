@@ -16,7 +16,7 @@ public class SpaceMarineCollectionSerializer implements JsonSerializer<SpaceMari
 	@Override
 	public JsonElement serialize(SpaceMarineCollection src, Type typeOfSrc, JsonSerializationContext context) {
 		JsonObject result = new JsonObject();
-		for(SpaceMarine spMar : src.getCollection()) {
+		for (SpaceMarine spMar : src.getCollection()) {
 			result.add(spMar.getName(), context.serialize(spMar));
 		}
 		return result;

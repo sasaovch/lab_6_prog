@@ -34,42 +34,45 @@ public class ServerApp {
     private final CommandManager commands;
     private final Logger logger;
     private final Scanner scanner;
-    private byte[] bufr, bufs;
-    private ByteBuffer sendBuffer, receiveBuffer;
-    private SocketAddress client, address;
+    private byte[] bufr;
+    private byte[] bufs;
+    private ByteBuffer sendBuffer;
+    private ByteBuffer receiveBuffer;
+    private SocketAddress client;
+    private SocketAddress address;
     private DatagramChannel channel;
     private ParsingJSON pars;
-    private File file;
+    private File fileOfApp;
     private boolean isWorkState;
+    private final int defaultBufferSize = 2048;
 
-    public ServerApp (CommandManager commands, InetAddress addr, int port) {
+    public ServerApp(CommandManager commands, InetAddress addr, int port) {
         this.commands = commands;
         address = new InetSocketAddress(addr, port);
     }
-    
+
     {
         isWorkState = true;
         logger = Logger.getLogger("Server");
         scanner = new Scanner(System.in);
-        bufr = new byte[4096];
+        bufr = new byte[defaultBufferSize];
         receiveBuffer = ByteBuffer.wrap(bufr);
     }
 
     public void start() throws IOException, ClassNotFoundException {
         try (DatagramChannel datachannel = DatagramChannel.open()) {
-
             this.channel = datachannel;
             logger.info("Open datagram channel. Server started working");
             channel.configureBlocking(false);
             channel.bind(address);
-            
             Message mess;
             CommandResult result;
-
-            while(isWorkState) {
+            while (isWorkState) {
                 checkCommands();
                 mess = receiveMessage();
-                if (Objects.isNull(mess)) continue;
+                if (Objects.isNull(mess)) {
+                    continue;
+                }
                 if (mess.getCommand().contains(".json")) {
                     parsing(mess.getCommand());
                     continue;
@@ -108,7 +111,7 @@ public class ServerApp {
         return command.run(data, spMar, collection);
     }
 
-    public String readfile(File file) throws FileNotFoundException, IOException{
+    public String readfile(File file) throws FileNotFoundException, IOException {
         StringBuilder strData = new StringBuilder();
         String line;
         if (!file.exists()) {
@@ -128,7 +131,7 @@ public class ServerApp {
             String line = scanner.nextLine();
             if ("save".equals(line)) {
                 try {
-                    if (pars.serialize(collection, file)) {
+                    if (pars.serialize(collection, fileOfApp)) {
                         logger.info("The collection has been saved");
                     } else {
                         logger.info("The collection hasn't been saved.");
@@ -168,8 +171,8 @@ public class ServerApp {
         CommandResult result;
         try {
             pars = new ParsingJSON();
-            file = new File(filename);
-            String fileline = readfile(file);
+            fileOfApp = new File(filename);
+            String fileline = readfile(fileOfApp);
             collection = pars.deSerialize(fileline);
         } catch (JsonSyntaxException | FileNotFoundException e) {
             logger.info("Something with parsing went wrong. Check data in file and rights of file.");

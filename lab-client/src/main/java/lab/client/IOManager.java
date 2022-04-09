@@ -16,7 +16,7 @@ public class IOManager {
     private final Stack<BufferedReader> previosReaders = new Stack<>();
     private final Stack<File> currentFiles = new Stack<>();
 
-    public IOManager(BufferedReader reader, PrintWriter writer, String promter){
+    public IOManager(BufferedReader reader, PrintWriter writer, String promter) {
         this.reader = reader;
         this.writer = writer;
         this.prompter = promter;
@@ -38,11 +38,11 @@ public class IOManager {
         return writer;
     }
 
-    public void turnOnFileMode(String filename) throws FileNotFoundException {
+    public void turnOnFileMode(String filename) {
         try {
             File file = new File(filename);
             if (file.exists() && !currentFiles.contains(file)) {
-                    BufferedReader newReader = new BufferedReader(new FileReader(file)); 
+                    BufferedReader newReader = new BufferedReader(new FileReader(file));
                     println("Started to execute script: " + file.getName());
                     println("------------------------------------------");
                     currentFiles.push(file);
@@ -51,7 +51,7 @@ public class IOManager {
                     fileMode = true;
             } else if (!file.exists()) {
                     printerr("File doesn't exist.");
-            } else if(currentFiles.contains(file)) {
+            } else if (currentFiles.contains(file)) {
                     printerr("The file was not executed due to recursion.");
                     turnOffFileMode();
                 }
@@ -78,7 +78,7 @@ public class IOManager {
         return reader.readLine();
     }
 
-    public String readfile(File file) throws FileNotFoundException, IOException{
+    public String readfile(File file) throws FileNotFoundException, IOException {
         StringBuilder strData = new StringBuilder();
         String line;
         if (!file.exists()) {
@@ -98,7 +98,7 @@ public class IOManager {
         writer.close();
     }
 
-    public void prompt(){
+    public void prompt() {
         writer.printf("%s", prompter);
     }
 

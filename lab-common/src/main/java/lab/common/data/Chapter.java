@@ -14,6 +14,7 @@ public class Chapter implements Serializable {
     private String parentLegion;
     private long marinesCount; //Значение поля должно быть больше 0, Максимальное значение поля: 1000
     private String world; //Поле не может быть null
+    private final Integer maxMarinesCount = 1000;
 
     public Chapter(String name, String parentLegion, long marinesCount, String world) throws IncorrectData {
         this.setName(name);
@@ -43,7 +44,7 @@ public class Chapter implements Serializable {
      * @throws IncorrectData
      */
     public void setMarinesCount(long marinesCount) throws IncorrectData {
-        if (!((1 <= marinesCount) && (marinesCount <= 1000))) {
+        if (!((1 <= marinesCount) && (marinesCount <= maxMarinesCount))) {
             throw new IncorrectData();
         }
         this.marinesCount = marinesCount;

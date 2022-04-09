@@ -21,6 +21,7 @@ public class ServerWork {
     private DatagramPacket outPacket;
     private DatagramPacket inPacket;
     private byte[] buff;
+    private final int defaultSizeBuffer = 2048;
 
     public ServerWork(InetAddress address, DatagramSocket socket, Integer port) {
         this.address = address;
@@ -36,8 +37,8 @@ public class ServerWork {
 
     public CommandResult reciveMessage() throws IOException, ClassNotFoundException {
         try {
-            buff = new byte[2048];
-            inPacket = new DatagramPacket(buff, 2048);
+            buff = new byte[defaultSizeBuffer];
+            inPacket = new DatagramPacket(buff, defaultSizeBuffer);
             socket.receive(inPacket);
             return (CommandResult) deserialize(inPacket.getData());
         } catch (SocketTimeoutException e) {

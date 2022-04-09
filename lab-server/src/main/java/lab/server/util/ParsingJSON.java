@@ -6,16 +6,16 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Objects;
 
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 
 import lab.common.data.Chapter;
 import lab.common.data.Coordinates;
 import lab.common.data.SpaceMarine;
 import lab.common.data.SpaceMarineCollection;
 
-
 public class ParsingJSON {
-  
     public boolean serialize(SpaceMarineCollection collection, File file) throws IOException {
         Gson gson = new GsonBuilder()
             .setPrettyPrinting()
@@ -35,7 +35,7 @@ public class ParsingJSON {
             .registerTypeAdapter(SpaceMarine.class, new SpaceMarineDeserializer())
             .registerTypeAdapter(Coordinates.class, new CoordinatesDeserializer())
             .registerTypeAdapter(Chapter.class, new ChapterDeserializer())
-            .create();;
+            .create();
         if ("".equals(strData)) {
             return new SpaceMarineCollection();
         }
