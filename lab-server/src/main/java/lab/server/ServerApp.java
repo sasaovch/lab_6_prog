@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.io.StreamCorruptedException;
+import java.net.BindException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
@@ -57,16 +59,25 @@ public class ServerApp {
     public void start(String filename) throws IOException, ClassNotFoundException {
         try (DatagramChannel datachannel = DatagramChannel.open()) {
             this.channel = datachannel;
-            logger.info("Open datagram channel. Server started working");
+            logger.info("Open datagram channel. Server started working.");
             parsing(filename);
             channel.configureBlocking(false);
-            channel.bind(address);
+            try {
+                channel.bind(address);
+            } catch (BindException e) {
+                logger.info("Cannot assign requested address.");
+                isWorkState = false;
+            }
             Message mess;
             CommandResult result;
             while (isWorkState) {
                 checkCommands();
                 mess = receiveMessage();
                 if (Objects.isNull(mess)) {
+                    continue;
+                } else if ("error".equals(mess.getCommand())) {
+                    logger.info("Something with data went wrong.");
+                    sendCommResult(new CommandResult("Something with data went wrong. Try again.", false));
                     continue;
                 }
                 logger.info("Receive command from client: " + mess.getCommand());
@@ -158,15 +169,24 @@ public class ServerApp {
         byte[] bufReceiveSize = new byte[defaultBufferSize];
         ByteBuffer receiveBufferSize = ByteBuffer.wrap(bufReceiveSize);
         client = channel.receive(receiveBufferSize);
+        Message mess;
         if (Objects.nonNull(client)) {
-            int size = (int) deserialize(bufReceiveSize);
-            byte[] bufr = new byte[size];
-            receiveBufferSize.clear();
-            ByteBuffer receiveBuffer = ByteBuffer.wrap(bufr);
-            channel.receive(receiveBuffer);
-            Message mess = (Message) deserialize(bufr);
-            receiveBuffer.clear();
-            return mess;
+            try {
+                Serializable receiveMess = deserialize(bufReceiveSize);
+                if (receiveMess.getClass().equals(Integer.class)) {
+                    int size = (int) receiveMess;
+                    byte[] bufr = new byte[size];
+                    ByteBuffer receiveBuffer = ByteBuffer.wrap(bufr);
+                    channel.receive(receiveBuffer);
+                    receiveMess = deserialize(bufr);
+                    mess = (Message) receiveMess;
+                } else {
+                    mess = (Message) receiveMess;
+                }
+                return mess;
+            } catch (StreamCorruptedException e) {
+                return new Message("error", null, null);
+            }
         } else {
             return null;
         }
