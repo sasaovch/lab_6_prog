@@ -31,9 +31,20 @@ public final class Server {
     }
 
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
-        InetAddress address = getFromVR("address", InetAddress.getLocalHost(), InetAddress::getByName);
-        System.out.println(address.getHostAddress());
-        Integer port = getFromVR("port", DEFAULT_PORT, Integer::parseInt);
+        InetAddress address = getFromVR("address", (variable, defaultVar) -> {
+            try {
+                return InetAddress.getByName(variable);
+            } catch (UnknownHostException e) {
+                return defaultVar;
+            }
+        }, InetAddress.getLocalHost());
+        Integer port = getFromVR("port", (variable, defaultVar) -> {
+            try {
+                return Integer.parseInt(variable);
+            } catch (NumberFormatException e) {
+                return defaultVar;
+            }
+        }, DEFAULT_PORT);
         CommandManager commands = new CommandManager();
         commands.addCommand("help", new HelpCommand());
         commands.addCommand("info", new InfoCommand());
@@ -49,19 +60,17 @@ public final class Server {
         commands.addCommand("count_by_loyal", new CountByLoyalCommand());
         commands.addCommand("print_descending", new PrintDescendingCommand());
         ServerApp app = new ServerApp(commands, address, port);
-        String filename = getFromVR("filename", DEFAULT_NAME_FILE, t -> t);
+        String filename = getFromVR("filename", (variable, defaultVar) -> {
+            return variable;
+        }, DEFAULT_NAME_FILE);
         app.start(filename);
     }
 
-    public static <T> T getFromVR(String name, T defaultParam, ConvertVR<String, T> funct) {
-        try {
-            String variable = System.getenv(name);
-            if (Objects.isNull(variable)) {
-                return defaultParam;
-            }
-            return funct.convert(variable);
-        } catch (UnknownHostException | NumberFormatException e) {
+    public static <T> T getFromVR(String name, ConvertVR<T> funct, T defaultParam) {
+        String variable = System.getenv(name);
+        if (Objects.isNull(variable)) {
             return defaultParam;
         }
+        return funct.convert(variable, defaultParam);
     }
 }

@@ -26,8 +26,20 @@ public final class Client {
     }
 
     public static void main(String[] args) throws IOException, IncorrectDataOfFileException, IncorrectData, ClassNotFoundException, InterruptedException {
-        InetAddress address = getFromVR("address", InetAddress.getLocalHost(), InetAddress::getByName);
-        Integer port = getFromVR("prot", DEFAULT_PORT, Integer::parseInt);
+        InetAddress address = getFromVR("address", (variable, defaultVar) -> {
+            try {
+                return InetAddress.getByName(variable);
+            } catch (UnknownHostException e) {
+                return defaultVar;
+            }
+        }, InetAddress.getLocalHost());
+        Integer port = getFromVR("port", (variable, defaultVar) -> {
+            try {
+                return Integer.parseInt(variable);
+            } catch (NumberFormatException e) {
+                return defaultVar;
+            }
+        }, DEFAULT_PORT);
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         PrintWriter writer = new PrintWriter(System.out, true);
         IOManager ioManager = new IOManager(reader, writer, "$");
@@ -57,15 +69,11 @@ public final class Client {
         console.run();
     }
 
-    public static <T> T getFromVR(String name, T defaultParam, ConvertVR<String, T> funct) {
-        try {
-            String variable = System.getenv(name);
-            if (Objects.isNull(variable)) {
-                return defaultParam;
-            }
-            return funct.convert(variable);
-        } catch (UnknownHostException | NumberFormatException e) {
+    public static <T> T getFromVR(String name, ConvertVR<T> funct, T defaultParam) {
+        String variable = System.getenv(name);
+        if (Objects.isNull(variable)) {
             return defaultParam;
         }
+        return funct.convert(variable, defaultParam);
     }
 }
