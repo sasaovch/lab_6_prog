@@ -46,6 +46,24 @@ public final class Client {
         AskMarine asker = new AskMarine(ioManager);
         ParsCommand parsingComm = new ParsCommand(ioManager, asker);
         Map<String, Function<String, Message>> parsingList = new HashMap<>();
+        parsingList = initializeParsingList(parsingList, parsingComm);
+        DatagramSocket socket = new DatagramSocket();
+        SendManager sendManager = new SendManager(address, socket, port);
+        ReceiveManager receiveManager = new ReceiveManager(socket);
+        receiveManager.setTimeout(DEFAULT_TIME_OUT);
+        Console console = new Console(parsingList, ioManager, receiveManager, sendManager);
+        console.run();
+    }
+
+    public static <T> T getFromVR(String name, ConvertVR<T> funct, T defaultParam) {
+        String variable = System.getenv(name);
+        if (Objects.isNull(variable)) {
+            return defaultParam;
+        }
+        return funct.convert(variable, defaultParam);
+    }
+
+    public static Map<String, Function<String, Message>> initializeParsingList(Map<String, Function<String, Message>> parsingList, ParsCommand parsingComm) {
         parsingList.put("help", parsingComm::helpComm);
         parsingList.put("info", parsingComm::infoComm);
         parsingList.put("show", parsingComm::showComm);
@@ -61,19 +79,6 @@ public final class Client {
         parsingList.put("remove_by_id", parsingComm::removeByIdComm);
         parsingList.put("count_by_loyal", parsingComm::countByLoyalComm);
         parsingList.put("execute_script", parsingComm::executeScriptComm);
-        DatagramSocket socket = new DatagramSocket();
-        SendManager sendManager = new SendManager(address, socket, port);
-        ReceiveManager receiveManager = new ReceiveManager(socket);
-        receiveManager.setTimeout(DEFAULT_TIME_OUT);
-        Console console = new Console(parsingList, ioManager, receiveManager, sendManager);
-        console.run();
-    }
-
-    public static <T> T getFromVR(String name, ConvertVR<T> funct, T defaultParam) {
-        String variable = System.getenv(name);
-        if (Objects.isNull(variable)) {
-            return defaultParam;
-        }
-        return funct.convert(variable, defaultParam);
+        return parsingList;
     }
 }
