@@ -13,7 +13,6 @@ import com.google.gson.JsonSyntaxException;
 import lab.common.data.Chapter;
 import lab.common.data.Coordinates;
 import lab.common.data.SpaceMarine;
-import lab.common.data.SpaceMarineCollection;
 
 public class ParsingJSON {
     public boolean serialize(SpaceMarineCollection collection, File file) throws IOException {

@@ -1,9 +1,5 @@
 package lab.common.data;
 
-
-/**
- * Enumeration with marine category constants.
- */
 public enum AstartesCategory {
     AGGRESSOR,
     INCEPTOR,

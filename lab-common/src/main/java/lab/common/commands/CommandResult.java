@@ -3,12 +3,12 @@ package lab.common.commands;
 import java.io.Serializable;
 
 public class CommandResult implements Serializable {
-    private String message;
+    private Serializable data;
     private Boolean result;
 
-    public CommandResult(String message, Boolean result) {
-        this.setMessage(message);
+    public CommandResult(Serializable data, Boolean result) {
         this.setResult(result);
+        this.setData(data);
     }
 
     public Boolean getResult() {
@@ -19,11 +19,11 @@ public class CommandResult implements Serializable {
         this.result = result;
     }
 
-    public String getMessage() {
-        return message;
+    public Serializable getData() {
+        return data;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setData(Serializable data) {
+        this.data = data;
     }
 }

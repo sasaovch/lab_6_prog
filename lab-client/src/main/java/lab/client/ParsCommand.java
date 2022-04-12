@@ -74,7 +74,7 @@ public class ParsCommand {
             SpaceMarine spMar = new SpaceMarine();
             spMar.setHealth(health);
             spMar.setHeartCount(heart);
-            Message message = new Message("remove_greater", null, spMar);
+            Message message = new Message("remove_lower", null, spMar);
             return message;
         } catch (IOException | IncorrectDataOfFileException | IncorrectData e) {
             return null;

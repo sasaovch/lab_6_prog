@@ -7,7 +7,6 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
 import lab.common.data.SpaceMarine;
-import lab.common.data.SpaceMarineCollection;
 
 
 

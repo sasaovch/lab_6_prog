@@ -14,25 +14,20 @@ import lab.common.util.Message;
 public class Console {
     private final Map<String, Function<String, Message>> parsingList;
     private final IOManager ioManager;
-    private final ServerWork server;
+    private final ReceiveManager receiveManager;
+    private final SendManager sendManager;
     private final Integer lengthOfCommand = 3;
     private Message message;
     private Boolean isWorkState = true;
 
-    public Console(Map<String, Function<String, Message>> parsingList, IOManager ioManager, ServerWork server) {
+    public Console(Map<String, Function<String, Message>> parsingList, IOManager ioManager, ReceiveManager receiveManager, SendManager sendManager) {
         this.parsingList = parsingList;
         this.ioManager = ioManager;
-        this.server = server;
+        this.receiveManager = receiveManager;
+        this.sendManager = sendManager;
     }
 
     public void run() throws IOException, IncorrectData, ClassNotFoundException, IncorrectDataOfFileException {
-        String filePath = System.getenv("filePath");
-        if (Objects.equals(filePath, null)) {
-            ioManager.printerr("There is no such variable \"filePath\"");
-            return;
-        }
-        server.sendMessage(new Message(filePath, null, null));
-        checkPrintResult(server.reciveMessage());
         String[] command = new String[lengthOfCommand];
         String line = "";
         String name;
@@ -54,8 +49,8 @@ public class Console {
                 continue;
             }
             if (parsCommand(name, value)) {
-                server.sendMessage(message);
-                checkPrintResult(server.reciveMessage());
+                sendManager.sendMessage(message);
+                checkAndPrintResult(receiveManager.reciveMessage());
             }
         }
         ioManager.println("Good Buy!\n\\(?_?)/");
@@ -114,12 +109,15 @@ public class Console {
         return resultcheck;
     }
 
-    public void checkPrintResult(CommandResult result) {
-        if (Objects.isNull(result)) {
-            ioManager.println("Server disconnected.");
-            isWorkState = false;
+    public void checkAndPrintResult(CommandResult result) {
+        if (Objects.isNull(result) && isWorkState) {
+            ioManager.println("Hmm... Something with server went wrong. Try again later.");
+        } else if (Objects.isNull(result)) {
+            return;
+        } else if (result.getResult()) {
+            ioManager.println(result.getData());
         } else {
-            ioManager.println(result.getMessage());
+            ioManager.printerr(result.getData());
         }
     }
 }

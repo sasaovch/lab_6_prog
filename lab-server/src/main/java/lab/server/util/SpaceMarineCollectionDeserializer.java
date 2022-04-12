@@ -14,7 +14,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
 import lab.common.data.SpaceMarine;
-import lab.common.data.SpaceMarineCollection;
 import lab.common.exception.IncorrectData;
 
 

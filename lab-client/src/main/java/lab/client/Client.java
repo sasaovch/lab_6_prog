@@ -6,13 +6,14 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.Function;
 
 import lab.common.exception.IncorrectData;
 import lab.common.exception.IncorrectDataOfFileException;
+import lab.common.util.ConvertArg;
 import lab.common.util.Message;
 
 public final class Client {
@@ -24,23 +25,12 @@ public final class Client {
     }
 
     public static void main(String[] args) throws IOException, IncorrectDataOfFileException, IncorrectData, ClassNotFoundException, InterruptedException {
-        Integer port;
-        String portString = System.getenv("port");
-        if (Objects.equals(portString, null)) {
-            port = DEFAULT_PORT;
-        } else {
-            try {
-                port = Integer.parseInt(portString);
-            } catch (NumberFormatException e) {
-                port = DEFAULT_PORT;
-            }
-        }
+        InetAddress address = getFromArgs(args, 0, InetAddress.getLocalHost(), InetAddress::getByName);
+        Integer port = getFromArgs(args, 1, DEFAULT_PORT, Integer::parseInt);
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         PrintWriter writer = new PrintWriter(System.out, true);
         IOManager ioManager = new IOManager(reader, writer, "$");
         AskMarine asker = new AskMarine(ioManager);
-        ServerWork server = new ServerWork(InetAddress.getLocalHost(), new DatagramSocket(), port);
-        server.setTimeout(DEFAULT_TIME_OUT);
         ParsCommand parsingComm = new ParsCommand(ioManager, asker);
         Map<String, Function<String, Message>> parsingList = new HashMap<>();
         parsingList.put("help", parsingComm::helpComm);
@@ -58,7 +48,19 @@ public final class Client {
         parsingList.put("remove_by_id", parsingComm::removeByIdComm);
         parsingList.put("count_by_loyal", parsingComm::countByLoyalComm);
         parsingList.put("execute_script", parsingComm::executeScriptComm);
-        Console console = new Console(parsingList, ioManager, server);
+        DatagramSocket socket = new DatagramSocket();
+        SendManager sendManager = new SendManager(address, socket, port);
+        ReceiveManager receiveManager = new ReceiveManager(socket);
+        receiveManager.setTimeout(DEFAULT_TIME_OUT);
+        Console console = new Console(parsingList, ioManager, receiveManager, sendManager);
         console.run();
+    }
+
+    public static <T> T getFromArgs(String[] args, int number, T defaultParam, ConvertArg<String, T> funct) {
+        try {
+            return funct.convert(args[number]);
+        } catch (UnknownHostException | NumberFormatException | ArrayIndexOutOfBoundsException e) {
+            return defaultParam;
+        }
     }
 }

@@ -9,7 +9,7 @@ import lab.common.exception.IncorrectData;
 /**
  * X-Y coordinates of Space Marine.
  */
-public class Coordinates implements Serializable {
+public class Coordinates implements Serializable, Comparable<Coordinates> {
     private double x;
     private Long y; //Поле не может быть null
 
@@ -75,5 +75,16 @@ public class Coordinates implements Serializable {
         }
         Coordinates compCoor = (Coordinates) object;
         return (Objects.equals(x, compCoor.getX())) && (Objects.equals(y, compCoor.getY()));
+    }
+
+    @Override
+    public int compareTo(Coordinates o) {
+        if (x == o.getX()) {
+            return Math.toIntExact(y - o.getY());
+        } else {
+            double res = x - o.getX();
+            int i = (int) res;
+            return i;
+        }
     }
 }

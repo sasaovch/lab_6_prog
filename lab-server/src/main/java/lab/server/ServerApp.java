@@ -9,6 +9,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
@@ -24,9 +25,9 @@ import lab.common.commands.Command;
 import lab.common.commands.CommandManager;
 import lab.common.commands.CommandResult;
 import lab.common.data.SpaceMarine;
-import lab.common.data.SpaceMarineCollection;
 import lab.common.util.Message;
 import lab.server.util.ParsingJSON;
+import lab.server.util.SpaceMarineCollection;
 
 
 public class ServerApp {
@@ -34,10 +35,6 @@ public class ServerApp {
     private final CommandManager commands;
     private final Logger logger;
     private final Scanner scanner;
-    private byte[] bufr;
-    private byte[] bufs;
-    private ByteBuffer sendBuffer;
-    private ByteBuffer receiveBuffer;
     private SocketAddress client;
     private SocketAddress address;
     private DatagramChannel channel;
@@ -55,14 +52,13 @@ public class ServerApp {
         isWorkState = true;
         logger = Logger.getLogger("Server");
         scanner = new Scanner(System.in);
-        bufr = new byte[defaultBufferSize];
-        receiveBuffer = ByteBuffer.wrap(bufr);
     }
 
-    public void start() throws IOException, ClassNotFoundException {
+    public void start(String filename) throws IOException, ClassNotFoundException {
         try (DatagramChannel datachannel = DatagramChannel.open()) {
             this.channel = datachannel;
             logger.info("Open datagram channel. Server started working");
+            parsing(filename);
             channel.configureBlocking(false);
             channel.bind(address);
             Message mess;
@@ -73,35 +69,15 @@ public class ServerApp {
                 if (Objects.isNull(mess)) {
                     continue;
                 }
-                if (mess.getCommand().contains(".json")) {
-                    parsing(mess.getCommand());
-                    continue;
-                }
                 logger.info("Receive command from client: " + mess.getCommand());
                 if (mess.getCommand().equals("exit")) {
-                    logger.info("Client disconnected");
+                    logger.info("Client disconnected.");
                     continue;
                 }
                 result = execute(mess);
                 sendCommResult(result);
-                logger.info("Send result of command to client: " + result.getMessage());
             }
         }
-    }
-
-    public Message deserialize(byte[] data) throws IOException, ClassNotFoundException {
-        ByteArrayInputStream in = new ByteArrayInputStream(data);
-        ObjectInputStream is = new ObjectInputStream(in);
-        Message mess = (Message) is.readObject();
-        return mess;
-    }
-
-    public byte[] serialize(Object obj) throws IOException {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        ObjectOutputStream os = new ObjectOutputStream(out);
-        os.writeObject(obj);
-        byte[] outMess =  out.toByteArray();
-        return outMess;
     }
 
     public CommandResult execute(Message mess) {
@@ -147,18 +123,48 @@ public class ServerApp {
         }
     }
 
+    public Serializable deserialize(byte[] data) throws IOException, ClassNotFoundException {
+        ByteArrayInputStream in = new ByteArrayInputStream(data);
+        ObjectInputStream is = new ObjectInputStream(in);
+        Serializable mess = (Serializable) is.readObject();
+        in.close();
+        is.close();
+        return mess;
+    }
+
+    public byte[] serialize(Object obj) throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        ObjectOutputStream os = new ObjectOutputStream(out);
+        os.writeObject(obj);
+        byte[] outMess = out.toByteArray();
+        out.close();
+        os.close();
+        return outMess;
+    }
+
     public void sendCommResult(CommandResult result) throws IOException {
-        bufs = serialize(result);
-        sendBuffer = ByteBuffer.wrap(bufs);
+        byte[] bufs = serialize(result);
+        byte[] bufSendSize = serialize(bufs.length);
+        ByteBuffer sendBufferSize = ByteBuffer.wrap(bufSendSize);
+        channel.send(sendBufferSize, client);
+        sendBufferSize.clear();
+        ByteBuffer sendBuffer = ByteBuffer.wrap(bufs);
         channel.send(sendBuffer, client);
-        logger.info("Send message to client that the collection hasn't been created");
         sendBuffer.clear();
+        logger.info("Send result of command to client: " + result.getData());
     }
 
     public Message receiveMessage() throws IOException, ClassNotFoundException {
-        client = channel.receive(receiveBuffer);
+        byte[] bufReceiveSize = new byte[defaultBufferSize];
+        ByteBuffer receiveBufferSize = ByteBuffer.wrap(bufReceiveSize);
+        client = channel.receive(receiveBufferSize);
         if (Objects.nonNull(client)) {
-            Message mess = deserialize(bufr);
+            int size = (int) deserialize(bufReceiveSize);
+            byte[] bufr = new byte[size];
+            receiveBufferSize.clear();
+            ByteBuffer receiveBuffer = ByteBuffer.wrap(bufr);
+            channel.receive(receiveBuffer);
+            Message mess = (Message) deserialize(bufr);
             receiveBuffer.clear();
             return mess;
         } else {
@@ -167,29 +173,18 @@ public class ServerApp {
     }
 
     public void parsing(String filename) throws JsonSyntaxException, FileNotFoundException, IOException {
-        logger.info("Received file path for creating collection");
-        CommandResult result;
+        logger.info("Creating collection.");
         try {
             pars = new ParsingJSON();
             fileOfApp = new File(filename);
             String fileline = readfile(fileOfApp);
             collection = pars.deSerialize(fileline);
+            logger.info("The collection has been created.");
         } catch (JsonSyntaxException | FileNotFoundException e) {
             logger.info("Something with parsing went wrong. Check data in file and rights of file.");
-            result = new CommandResult("Something with parsing went wrong. Check data in file and rights of file.", false);
-            sendCommResult(result);
             isWorkState = false;
             logger.info("Finish work.");
             return;
-        }
-        if (Objects.equals(collection, null)) {
-            result = new CommandResult("Incorrect data in file for parsing.", false);
-            sendCommResult(result);
-            isWorkState = false;
-            logger.info("Finish work.");
-        } else {
-            result = new CommandResult("Everything is ready to work.", true);
-            sendCommResult(result);
         }
     }
 }

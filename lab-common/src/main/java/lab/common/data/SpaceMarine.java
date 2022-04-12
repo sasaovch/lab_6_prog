@@ -217,7 +217,7 @@ public class SpaceMarine implements Comparable<SpaceMarine>, Serializable {
 
     @Override
     public String toString() {
-        return "------------" + "\nName: " + name + "\nId: " + id + "\nHealth: " + health + "\nHeartCount: "
+        return "\nName: " + name + "\nId: " + id + "\nHealth: " + health + "\nHeartCount: "
                 + heartCount + "\nLoyal: " + loyal + "\nInitialization time: "
                 + creationDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
                 + "\n" + "Chapter:\n" + chapter + "\n" + coordinates + "\nCategory: " + category + "\n";
@@ -228,9 +228,6 @@ public class SpaceMarine implements Comparable<SpaceMarine>, Serializable {
         int diffHealth = health - o.getHealth();
         if (diffHealth == 0) {
             int diffHearC = heartCount - o.getHeartCount();
-            if (diffHearC == 0) {
-                return name.length() - o.getName().length();
-            }
             return diffHearC;
         }
         return diffHealth;

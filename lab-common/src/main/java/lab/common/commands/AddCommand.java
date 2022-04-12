@@ -1,14 +1,17 @@
 package lab.common.commands;
 
 import lab.common.data.SpaceMarine;
-import lab.common.data.SpaceMarineCollection;
+import lab.common.util.CollectionManager;
 
 
 public class AddCommand extends Command {
 
     @Override
-    public CommandResult run(Object data, SpaceMarine spMar, SpaceMarineCollection collection) {
-        collection.addElement(spMar);
-        return new CommandResult(spMar.getName() + " has been successfuly added.", true);
+    public CommandResult run(Object data, SpaceMarine spMar, CollectionManager collection) {
+        if (collection.addElement(spMar)) {
+            return new CommandResult(spMar.getName() + " has been successfuly added.", true);
+        } else {
+            return new CommandResult(spMar.getName() + " hasn't been added.", false);
+        }
     }
 }
