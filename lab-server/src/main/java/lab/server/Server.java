@@ -3,6 +3,7 @@ package lab.server;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Objects;
 
 import lab.common.commands.AddCommand;
 import lab.common.commands.AddIfMinCommand;
@@ -18,7 +19,7 @@ import lab.common.commands.RemoveGreaterCommand;
 import lab.common.commands.RemoveLowerCommand;
 import lab.common.commands.ShowCommand;
 import lab.common.commands.UpdateCommand;
-import lab.common.util.ConvertArg;
+import lab.common.util.ConvertVR;
 
 
 public final class Server {
@@ -30,9 +31,9 @@ public final class Server {
     }
 
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
-        InetAddress address = getFromArgs(args, 0, InetAddress.getLocalHost(), InetAddress::getByName);
+        InetAddress address = getFromVR("address", InetAddress.getLocalHost(), InetAddress::getByName);
         System.out.println(address.getHostAddress());
-        Integer port = getFromArgs(args, 1, DEFAULT_PORT, Integer::parseInt);
+        Integer port = getFromVR("port", DEFAULT_PORT, Integer::parseInt);
         CommandManager commands = new CommandManager();
         commands.addCommand("help", new HelpCommand());
         commands.addCommand("info", new InfoCommand());
@@ -48,14 +49,18 @@ public final class Server {
         commands.addCommand("count_by_loyal", new CountByLoyalCommand());
         commands.addCommand("print_descending", new PrintDescendingCommand());
         ServerApp app = new ServerApp(commands, address, port);
-        String filename = getFromArgs(args, 2, DEFAULT_NAME_FILE, t -> t);
+        String filename = getFromVR("filename", DEFAULT_NAME_FILE, t -> t);
         app.start(filename);
     }
 
-    public static <T> T getFromArgs(String[] args, int number, T defaultParam, ConvertArg<String, T> funct) {
+    public static <T> T getFromVR(String name, T defaultParam, ConvertVR<String, T> funct) {
         try {
-            return funct.convert(args[number]);
-        } catch (UnknownHostException | NumberFormatException | ArrayIndexOutOfBoundsException e) {
+            String variable = System.getenv(name);
+            if (Objects.isNull(variable)) {
+                return defaultParam;
+            }
+            return funct.convert(variable);
+        } catch (UnknownHostException | NumberFormatException e) {
             return defaultParam;
         }
     }

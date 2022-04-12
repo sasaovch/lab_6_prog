@@ -1,11 +1,14 @@
 package lab.client;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.TreeMap;
 import java.util.function.Function;
 
 import lab.common.commands.CommandResult;
+import lab.common.data.SpaceMarine;
 import lab.common.exception.IncorrectData;
 import lab.common.exception.IncorrectDataOfFileException;
 import lab.common.util.Message;
@@ -115,7 +118,23 @@ public class Console {
         } else if (Objects.isNull(result)) {
             return;
         } else if (result.getResult()) {
-            ioManager.println(result.getData());
+            switch (result.getName()) {
+                case "count_by_loyal" :
+                    ioManager.println("Count by loyal: " + result.getData());
+                    break;
+                case "group_counting_by_name" :
+                    @SuppressWarnings("unchecked") Map<String, List<SpaceMarine>> outMap = (TreeMap<String, List<SpaceMarine>>) result.getData();
+                    ioManager.println("Group counting by name");
+                    outMap.entrySet().stream().forEach(s -> ioManager.println(s.getKey() + ": " + s.getValue().size()));
+                    break;
+                case "info" :
+                    @SuppressWarnings("unchecked") Map<String, Object> printMap = (TreeMap<String, Object>) result.getData();
+                    ioManager.println("Info");
+                    printMap.entrySet().stream().forEach(s -> ioManager.println(s.getKey() + ": " + s.getValue()));
+                    break;
+                default :
+                    ioManager.println(result.getData());
+            }
         } else {
             ioManager.printerr(result.getData());
         }

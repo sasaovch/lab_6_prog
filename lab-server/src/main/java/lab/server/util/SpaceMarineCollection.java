@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
@@ -117,9 +118,9 @@ public class SpaceMarineCollection implements CollectionManager {
         return Math.toIntExact(spaceMarineSet.stream().filter((spMar) -> Objects.equals(getter.apply(spMar), value)).count());
     }
 
-    public <R> HashMap<String, Integer> groupCountingByField(Function<SpaceMarine, R> getter) {
-        HashMap<String, Integer> outputMap = new HashMap<>();
-       spaceMarineSet.stream().forEach(spMar -> outputMap.compute(getter.apply(spMar).toString(), (key, val) -> (Objects.equals(val, null) ? 1 : val + 1)));
+    public <R> Map<R, List<SpaceMarine>> groupByField(Function<SpaceMarine, R> getter) {
+        Map<R, List<SpaceMarine>> outputMap = new HashMap<>();
+        outputMap = spaceMarineSet.stream().collect(Collectors.groupingBy(getter::apply));
         return outputMap;
     }
 

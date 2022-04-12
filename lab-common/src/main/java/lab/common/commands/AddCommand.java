@@ -9,9 +9,9 @@ public class AddCommand extends Command {
     @Override
     public CommandResult run(Object data, SpaceMarine spMar, CollectionManager collection) {
         if (collection.addElement(spMar)) {
-            return new CommandResult(spMar.getName() + " has been successfuly added.", true);
+            return new CommandResult("add", spMar.getName() + " has been successfuly added.", true);
         } else {
-            return new CommandResult(spMar.getName() + " hasn't been added.", false);
+            return new CommandResult("add", spMar.getName() + " hasn't been added.", false);
         }
     }
 }

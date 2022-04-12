@@ -9,9 +9,9 @@ public class AddIfMinCommand extends Command {
     @Override
     public CommandResult run(Object data, SpaceMarine spMar, CollectionManager collection) {
         if (collection.addIfMin(spMar)) {
-            return new CommandResult(spMar.getName() + " has been successfully added.", true);
+            return new CommandResult("add_if_min", spMar.getName() + " has been successfully added.", true);
         } else {
-            return new CommandResult("Element is bigger than minimal.", false);
+            return new CommandResult("add_if_min", "Element is bigger than minimal.", false);
         }
     }
 }

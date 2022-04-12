@@ -9,6 +9,6 @@ public class ClearCommand extends Command {
     @Override
     public CommandResult run(Object data, SpaceMarine spMar, CollectionManager collection) {
         collection.clearCollection();
-        return new CommandResult("The collection is cleared.", true);
+        return new CommandResult("clear", "The collection is cleared.", true);
     }
 }

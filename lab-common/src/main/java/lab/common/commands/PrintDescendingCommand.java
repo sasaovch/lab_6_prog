@@ -11,10 +11,10 @@ public class PrintDescendingCommand extends Command {
     @Override
     public CommandResult run(Object data, SpaceMarine spMar, CollectionManager collection) {
         if (collection.getSize() == 0) {
-            return new CommandResult("The collection is empty.", true);
+            return new CommandResult("print_descending", "The collection is empty.", true);
         }
         ArrayList<SpaceMarine> list = collection.sortCollection();
         Collections.reverse(list);
-        return new CommandResult(list, true);
+        return new CommandResult("print_descending", list, true);
     }
 }

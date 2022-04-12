@@ -14,6 +14,6 @@ public class InfoCommand extends Command {
         outMap.put("Initialization time", collection.getTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         outMap.put("Number of Marines", collection.getSize());
         outMap.put("Type", SpaceMarine.class);
-        return new CommandResult(outMap, true);
+        return new CommandResult("info", outMap, true);
     }
 }

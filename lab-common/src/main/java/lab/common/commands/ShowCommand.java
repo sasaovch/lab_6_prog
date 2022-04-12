@@ -10,8 +10,8 @@ public class ShowCommand extends Command {
     @Override
     public CommandResult run(Object data, SpaceMarine spMar, CollectionManager collection) {
         if (collection.getSize() == 0) {
-            return new CommandResult("The collection is empty.", true);
+            return new CommandResult("show", "The collection is empty.", true);
         }
-        return new CommandResult((Serializable) collection.sortByCoordinates(), true);
+        return new CommandResult("show", (Serializable) collection.sortByCoordinates(), true);
     }
 }

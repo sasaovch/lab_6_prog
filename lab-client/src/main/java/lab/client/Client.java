@@ -9,11 +9,12 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 
 import lab.common.exception.IncorrectData;
 import lab.common.exception.IncorrectDataOfFileException;
-import lab.common.util.ConvertArg;
+import lab.common.util.ConvertVR;
 import lab.common.util.Message;
 
 public final class Client {
@@ -25,8 +26,8 @@ public final class Client {
     }
 
     public static void main(String[] args) throws IOException, IncorrectDataOfFileException, IncorrectData, ClassNotFoundException, InterruptedException {
-        InetAddress address = getFromArgs(args, 0, InetAddress.getLocalHost(), InetAddress::getByName);
-        Integer port = getFromArgs(args, 1, DEFAULT_PORT, Integer::parseInt);
+        InetAddress address = getFromVR("address", InetAddress.getLocalHost(), InetAddress::getByName);
+        Integer port = getFromVR("prot", DEFAULT_PORT, Integer::parseInt);
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         PrintWriter writer = new PrintWriter(System.out, true);
         IOManager ioManager = new IOManager(reader, writer, "$");
@@ -56,10 +57,14 @@ public final class Client {
         console.run();
     }
 
-    public static <T> T getFromArgs(String[] args, int number, T defaultParam, ConvertArg<String, T> funct) {
+    public static <T> T getFromVR(String name, T defaultParam, ConvertVR<String, T> funct) {
         try {
-            return funct.convert(args[number]);
-        } catch (UnknownHostException | NumberFormatException | ArrayIndexOutOfBoundsException e) {
+            String variable = System.getenv(name);
+            if (Objects.isNull(variable)) {
+                return defaultParam;
+            }
+            return funct.convert(variable);
+        } catch (UnknownHostException | NumberFormatException e) {
             return defaultParam;
         }
     }

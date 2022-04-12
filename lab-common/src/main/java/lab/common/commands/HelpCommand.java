@@ -8,7 +8,7 @@ public class HelpCommand extends Command {
 
     @Override
     public CommandResult run(Object data, SpaceMarine spMar, CollectionManager collection) {
-        return new CommandResult("help : print info about all commands\n"
+        return new CommandResult("help", "help : print info about all commands\n"
         + "info : print info about collection: type, initialization date, number of elements\n"
         + "show : print all elements of collection\n"
         + "add {element} : add new element in collection\n"

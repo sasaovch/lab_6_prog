@@ -17,7 +17,7 @@ public interface CollectionManager {
     void clearCollection();
     <T> int countBySomeThing(Function<SpaceMarine, T> getter, T value);
     int getSize();
-    <T> Map<String, Integer> groupCountingByField(Function<SpaceMarine, T> funct);
+    <R> Map<R, List<SpaceMarine>> groupByField(Function<SpaceMarine, R> funct);
     LocalDateTime getTime();
     ArrayList<SpaceMarine> sortCollection();
     boolean removeIf(Predicate<SpaceMarine> predicate);

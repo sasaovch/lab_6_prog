@@ -1,5 +1,6 @@
 package lab.common.commands;
 
+import java.util.List;
 import java.util.TreeMap;
 
 import lab.common.data.SpaceMarine;
@@ -11,9 +12,9 @@ public class GroupCountingByNameCommand extends Command {
     @Override
     public CommandResult run(Object data, SpaceMarine spMar, CollectionManager collection) {
             if (collection.getSize() == 0) {
-                return new CommandResult("The collection is empty.", true);
+                return new CommandResult("group_counting_by_name", "The collection is empty.", true);
             }
-            TreeMap<String, Integer> outMap = new TreeMap<>(collection.groupCountingByField(SpaceMarine::getName));
-            return new CommandResult(outMap, true);
+            TreeMap<String, List<SpaceMarine>> outMap = new TreeMap<>(collection.groupByField(SpaceMarine::getName));
+            return new CommandResult("group_counting_by_name", outMap, true);
     }
 }

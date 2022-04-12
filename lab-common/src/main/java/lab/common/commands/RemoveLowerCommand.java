@@ -10,9 +10,9 @@ public class RemoveLowerCommand extends Command {
         if (collection.removeIf(spaceMar -> {
                 return (spaceMar.compareTo(spMar) < 0);
             })) {
-            return new CommandResult("All items have been successfully deleted.", true);
+            return new CommandResult("remove_lower", "All items have been successfully deleted.", true);
         } else {
-            return new CommandResult("No element has been deleted.", true);
+            return new CommandResult("remove_lower", "No element has been deleted.", true);
         }
     }
 }
