@@ -27,7 +27,7 @@ public class Console {
         this.sendManager = sendManager;
     }
 
-    public void run() throws IOException, IncorrectData, ClassNotFoundException, IncorrectDataOfFileException {
+    public void run() throws IOException, IncorrectData, ClassNotFoundException, IncorrectDataOfFileException, InterruptedException {
         String[] command = new String[lengthOfCommand];
         String line = "";
         String name;

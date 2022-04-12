@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+
 import lab.common.util.Message;
 
 public class SendManager {
@@ -16,6 +17,7 @@ public class SendManager {
     private byte[] buff;
     private byte[] buffsize;
     private DatagramPacket outPacket;
+    private final int defaultSleepTime = 500;
 
     public SendManager(InetAddress address, DatagramSocket socket, Integer port) {
         this.address = address;
@@ -23,12 +25,13 @@ public class SendManager {
         this.port = port;
     }
 
-    public void sendMessage(Message mess) throws IOException, ClassNotFoundException {
+    public void sendMessage(Message mess) throws IOException, ClassNotFoundException, InterruptedException {
         buff = serialize(mess);
         outPacket = new DatagramPacket(buff, buff.length, address, port);
         buffsize = serialize(buff.length);
         socket.send(new DatagramPacket(serialize(buff.length), buffsize.length, address, port)); //81
         socket.send(outPacket);
+        Thread.sleep(defaultSleepTime);
     }
 
     public byte[] serialize(Serializable mess) throws IOException {

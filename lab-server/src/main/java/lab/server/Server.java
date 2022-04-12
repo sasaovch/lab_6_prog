@@ -29,7 +29,7 @@ public final class Server {
         throw new UnsupportedOperationException("This is an utility class and can not be instantiated");
     }
 
-    public static void main(String[] args) throws IOException, ClassNotFoundException {
+    public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
         InetAddress address = getFromArgs(args, 0, InetAddress.getLocalHost(), InetAddress::getByName);
         Integer port = getFromArgs(args, 1, DEFAULT_PORT, Integer::parseInt);
         CommandManager commands = new CommandManager();
