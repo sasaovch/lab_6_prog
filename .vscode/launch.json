@@ -24,7 +24,7 @@
             "request": "launch",
             "mainClass": "lab.server.Server",
             "projectName": "lab-server",
-            "args": "192.168.198.117 7000"
+            //"args": "kjh 7000"
         }
     ],
     "compounds": [

@@ -75,9 +75,9 @@ public class Console {
     }
 
     public boolean checkLine(String line) {
-        if (Objects.equals(line, null) && !ioManager.getFileMode()) {
+        if ((Objects.isNull(line) && !ioManager.getFileMode()) || ("".equals(line.trim()) && !ioManager.getFileMode())) {
             return false;
-        } else if (Objects.equals(line, null)) {
+        } else if ((Objects.isNull(line)) || ("".equals(line.trim()))) {
             ioManager.turnOffFileMode();
             return false;
         }

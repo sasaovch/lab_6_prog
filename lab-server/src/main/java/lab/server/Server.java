@@ -31,6 +31,7 @@ public final class Server {
 
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
         InetAddress address = getFromArgs(args, 0, InetAddress.getLocalHost(), InetAddress::getByName);
+        System.out.println(address.getHostAddress());
         Integer port = getFromArgs(args, 1, DEFAULT_PORT, Integer::parseInt);
         CommandManager commands = new CommandManager();
         commands.addCommand("help", new HelpCommand());

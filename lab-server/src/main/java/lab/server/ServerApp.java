@@ -16,6 +16,7 @@ import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Scanner;
 import java.util.logging.Logger;
@@ -64,6 +65,7 @@ public class ServerApp {
             channel.configureBlocking(false);
             try {
                 channel.bind(address);
+                logger.info(channel.getLocalAddress().toString());
             } catch (BindException e) {
                 logger.info("Cannot assign requested address.");
                 isWorkState = false;
@@ -115,7 +117,12 @@ public class ServerApp {
 
     public void checkCommands() throws IOException {
         if (System.in.available() > 0) {
-            String line = scanner.nextLine();
+            String line = "";
+            try {
+                line = scanner.nextLine();
+            } catch (NoSuchElementException e) {
+                line = "exit";
+            }
             if ("save".equals(line)) {
                 try {
                     if (pars.serialize(collection, fileOfApp)) {
